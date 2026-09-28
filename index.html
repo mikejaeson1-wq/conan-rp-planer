@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>Conan RP-Planer · Kontobestätigung</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0d1119;--panel:#171e2a;--gold:#f0b85b;--gold2:#c9822b;--text:#f7f2e9;--muted:#b8c1cf;--ok:#92e2ad;--bad:#ff9b9b;--line:#40506a}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 10%,#273751 0,transparent 38%),radial-gradient(circle at 85% 90%,#3a2417 0,transparent 35%),var(--bg);color:var(--text);font:16px/1.55 "Segoe UI",system-ui,sans-serif}
+    main{width:min(680px,100%);background:linear-gradient(145deg,rgba(34,44,59,.97),rgba(20,26,37,.98));border:1px solid var(--line);border-radius:22px;padding:clamp(24px,5vw,48px);box-shadow:0 28px 80px #0009;position:relative;overflow:hidden}
+    main:before,main:after{content:"";position:absolute;width:86px;height:86px;border-color:var(--gold2);opacity:.65}
+    main:before{left:15px;top:15px;border-left:2px solid;border-top:2px solid;border-radius:14px 0 0}
+    main:after{right:15px;bottom:15px;border-right:2px solid;border-bottom:2px solid;border-radius:0 0 14px}
+    .mark{width:64px;height:64px;margin:0 auto 18px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font:700 32px Georgia,serif;box-shadow:0 0 28px #f0b85b33}
+    h1{margin:0;text-align:center;color:var(--gold);font:700 clamp(27px,5vw,40px) Georgia,serif}
+    .tagline{text-align:center;color:var(--muted);margin:8px 0 30px}
+    .state{border:1px solid var(--line);border-radius:14px;padding:20px;background:#111824cc}
+    .state h2{margin:0 0 8px;font-size:22px}.state.ok h2{color:var(--ok)}.state.error h2{color:var(--bad)}
+    .codebox{margin-top:18px;padding:14px;border:1px solid #596982;border-radius:10px;background:#0b1018}
+    .codebox label{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}
+    code{display:block;min-height:25px;word-break:break-all;color:#ffe0a3;font:13px/1.5 Consolas,monospace}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button{appearance:none;border:1px solid var(--gold2);border-radius:9px;background:#2b3545;color:white;padding:11px 16px;font-weight:700;cursor:pointer}
+    button.primary{background:linear-gradient(#d99537,#af6e1d);border-color:#f1bd65;color:#17110a}
+    button:hover{filter:brightness(1.12)}
+    .hint{color:var(--muted);margin:18px 0 0;font-size:14px}
+    .privacy{margin-top:26px;padding-top:16px;border-top:1px solid #354157;color:#93a0b2;font-size:12px}
+    .toast{min-height:24px;color:var(--ok);font-weight:700;margin-top:10px}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark">C</div>
+    <h1>Conan RP-Planer</h1>
+    <p class="tagline">Deine Welt · deine Geschichten · gemeinsam geplant · made by Elion</p>
+    <section id="state" class="state">
+      <h2 id="title">Anmeldung wird geprüft …</h2>
+      <p id="message">Einen Augenblick bitte.</p>
+      <div id="codeArea" class="codebox" hidden>
+        <label>Einmaliger Wiederherstellungscode</label>
+        <code id="code">••••••••••••••••</code>
+        <div class="actions">
+          <button id="copy" class="primary" type="button">Code für den Planer kopieren</button>
+          <button id="toggle" type="button">Code anzeigen</button>
+        </div>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      </div>
+      <p id="hint" class="hint"></p>
+    </section>
+    <p class="privacy">Der Schlüssel wird ausschließlich in diesem Browser verarbeitet, nicht gespeichert und an keinen weiteren Dienst gesendet. Teile ihn niemals als Screenshot.</p>
+  </main>
+  <script>
+  (() => {
+    "use strict";
+    const source = location.hash.length > 1 ? location.hash.slice(1) : (location.search.length > 1 ? location.search.slice(1) : "");
+    const params = new URLSearchParams(source);
+    const token = params.get("access_token") || "";
+    const type = params.get("type") || "";
+    const errorCode = params.get("error_code") || params.get("error") || "";
+    const errorDescription = (params.get("error_description") || "").replace(/\+/g, " ");
+    const state = document.getElementById("state");
+    const title = document.getElementById("title");
+    const message = document.getElementById("message");
+    const hint = document.getElementById("hint");
+    const codeArea = document.getElementById("codeArea");
+    const code = document.getElementById("code");
+    const toast = document.getElementById("toast");
+    const toggle = document.getElementById("toggle");
+    let visible = false;
+    history.replaceState({}, document.title, location.pathname);
+    const mask = value => value.length > 24 ? value.slice(0,10) + "••••••••••" + value.slice(-8) : "••••••••••••••••";
+    if (errorCode) {
+      state.classList.add("error");
+      if (errorCode === "otp_expired") {
+        title.textContent = "Der Link ist abgelaufen";
+        message.textContent = "Dieser Bestätigungs- oder Passwortlink wurde bereits verwendet oder ist nicht mehr gültig.";
+        hint.textContent = "Fordere im Planer eine neue Bestätigungs- oder Passwort-Mail an und verwende ausschließlich den neuesten Link.";
+      } else {
+        title.textContent = "Bestätigung nicht möglich";
+        message.textContent = errorDescription || ("Supabase meldet: " + errorCode);
+        hint.textContent = "Öffne im Planer „Boten & Clan → Anmeldung reparieren“ und fordere einen neuen Link an.";
+      }
+      return;
+    }
+    if (token) {
+      state.classList.add("ok");
+      codeArea.hidden = false;
+      code.textContent = mask(token);
+      if (type === "recovery") {
+        title.textContent = "Passwortwiederherstellung bereit";
+        message.textContent = "Der sichere Einmalcode wurde erkannt.";
+        hint.textContent = "Kopiere den Code, füge ihn im Planer unter „Anmeldung reparieren“ ein und lege dort dein neues Passwort fest.";
+      } else {
+        title.textContent = "E-Mail erfolgreich bestätigt";
+        message.textContent = "Dein Boten-Konto ist jetzt freigeschaltet.";
+        hint.textContent = "Du kannst dich nun im Conan RP-Planer anmelden. Der Code wird normalerweise nicht benötigt.";
+      }
+      toggle.addEventListener("click", () => {
+        visible = !visible;
+        code.textContent = visible ? token : mask(token);
+        toggle.textContent = visible ? "Code verbergen" : "Code anzeigen";
+      });
+      document.getElementById("copy").addEventListener("click", async () => {
+        const payload = "access_token=" + token;
+        try {
+          await navigator.clipboard.writeText(payload);
+        } catch (_) {
+          const area = document.createElement("textarea");
+          area.value = payload; area.style.position = "fixed"; area.style.opacity = "0";
+          document.body.appendChild(area); area.select(); document.execCommand("copy"); area.remove();
+        }
+        toast.textContent = "Code kopiert – jetzt in den Planer einfügen.";
+        setTimeout(() => toast.textContent = "", 5000);
+      });
+      return;
+    }
+    state.classList.add("ok");
+    title.textContent = "Bestätigungsseite ist bereit";
+    message.textContent = "Öffne den neuesten Link aus deiner Supabase-E-Mail. Danach zeigt diese Seite den passenden Status an.";
+    hint.textContent = "Für Hilfe: Im Planer „Boten & Clan → Anmeldung reparieren“ öffnen.";
+  })();
+  </script>
+</body>
+</html>
