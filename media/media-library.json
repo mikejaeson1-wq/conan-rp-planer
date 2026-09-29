@@ -1,7 +1,7 @@
 {
     "format":  "ConanRPMediaLibrary",
     "version":  190,
-    "updated":  "2026-09-29T07:44:45.0137434Z",
+    "updated":  "2026-09-29T07:45:10.3191875Z",
     "tracks":  [
                    {
                        "id":  "901ba44c57a343b6ae094b0e44039e9b",
@@ -50,6 +50,18 @@
                        "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/die-laute-war-allein-36392579.mp3",
                        "sha256":  "738c7704cb15c3421913817fe9173fbadb92ca2982c7c3c6c0f3228ad05d9c18",
                        "published":  "2026-09-29T07:33:21.9901950Z"
+                   },
+                   {
+                       "id":  "9e2dbbde666642718c46a5ccd6ad4f32",
+                       "title":  "zwischen-licht-und-schatten",
+                       "artist":  "",
+                       "category":  "Sonstiges",
+                       "mood":  "",
+                       "use":  "Szenenmusik",
+                       "character":  "Elion",
+                       "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/zwischen-licht-und-schatten-9e2dbbde.mp3",
+                       "sha256":  "c9c68e2982b1dc318ad5d0af1921cdc5c8544bb7f53c6b0335769f7d9cc22fcb",
+                       "published":  "2026-09-29T07:45:10.3121309Z"
                    },
                    {
                        "id":  "4ee1d8840c24485babbcdcc12c5fe5cb",
