@@ -1,7 +1,7 @@
 {
     "format":  "ConanRPMediaLibrary",
     "version":  190,
-    "updated":  "2026-09-29T07:43:42.3539332Z",
+    "updated":  "2026-09-29T07:44:01.8690403Z",
     "tracks":  [
                    {
                        "id":  "6b0c32f6cd184d378013c49882db91f4",
@@ -26,6 +26,18 @@
                        "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/die-laute-war-allein-36392579.mp3",
                        "sha256":  "738c7704cb15c3421913817fe9173fbadb92ca2982c7c3c6c0f3228ad05d9c18",
                        "published":  "2026-09-29T07:33:21.9901950Z"
+                   },
+                   {
+                       "id":  "4ee1d8840c24485babbcdcc12c5fe5cb",
+                       "title":  "kohle-gib-das-her",
+                       "artist":  "",
+                       "category":  "Sonstiges",
+                       "mood":  "",
+                       "use":  "Tavernenmusik",
+                       "character":  "Nyren",
+                       "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/kohle-gib-das-her-4ee1d884.mp3",
+                       "sha256":  "65156cea6c87362bc2aa7f5adbde8fe31d9511bce79ef774d41cefc36ae655f0",
+                       "published":  "2026-09-29T07:44:01.8584537Z"
                    }
                ]
 }
