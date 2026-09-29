@@ -1,0 +1,19 @@
+{
+    "format":  "ConanRPMediaLibrary",
+    "version":  190,
+    "updated":  "2026-09-29T07:33:22.0607755Z",
+    "tracks":  [
+                   {
+                       "id":  "363925792373462eaec9616568334a10",
+                       "title":  "die-laute-war-allein",
+                       "artist":  "",
+                       "category":  "Sonstiges",
+                       "mood":  "",
+                       "use":  "Allgemein",
+                       "character":  "",
+                       "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/die-laute-war-allein-36392579.mp3",
+                       "sha256":  "738c7704cb15c3421913817fe9173fbadb92ca2982c7c3c6c0f3228ad05d9c18",
+                       "published":  "2026-09-29T07:33:21.9901950Z"
+                   }
+               ]
+}
