@@ -1,16 +1,28 @@
 {
     "format":  "ConanRPMediaLibrary",
     "version":  190,
-    "updated":  "2026-09-29T07:33:22.0607755Z",
+    "updated":  "2026-09-29T07:43:42.3539332Z",
     "tracks":  [
+                   {
+                       "id":  "6b0c32f6cd184d378013c49882db91f4",
+                       "title":  "FANG MICH DOCH",
+                       "artist":  "",
+                       "category":  "Sonstiges",
+                       "mood":  "",
+                       "use":  "Tavernenmusik",
+                       "character":  "Nyren",
+                       "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/fang-mich-doch-6b0c32f6.mp3",
+                       "sha256":  "caf6e1f26955ad342479e7772fbcfce0ccaa7962dba673497d314b971aa26e19",
+                       "published":  "2026-09-29T07:43:42.3381766Z"
+                   },
                    {
                        "id":  "363925792373462eaec9616568334a10",
                        "title":  "die-laute-war-allein",
                        "artist":  "",
                        "category":  "Sonstiges",
                        "mood":  "",
-                       "use":  "Allgemein",
-                       "character":  "",
+                       "use":  "Tavernenmusik",
+                       "character":  "Nyren",
                        "url":  "https://mikejaeson1-wq.github.io/conan-rp-planer/media/audio/die-laute-war-allein-36392579.mp3",
                        "sha256":  "738c7704cb15c3421913817fe9173fbadb92ca2982c7c3c6c0f3228ad05d9c18",
                        "published":  "2026-09-29T07:33:21.9901950Z"
