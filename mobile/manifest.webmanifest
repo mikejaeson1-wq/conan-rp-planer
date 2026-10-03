@@ -1,0 +1,12 @@
+{
+  "name": "Conan RP-Planer Mobile Companion",
+  "short_name": "Conan RP",
+  "description": "Boten, Clan-Chats, Aufgaben und Events unterwegs.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1018",
+  "theme_color": "#151d28",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
