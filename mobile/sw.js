@@ -1,5 +1,5 @@
-const CACHE='conan-rp-mobile-270-20261004-2';
-const CORE=['./?v=270.0.1','index.html?v=270.0.1','styles.css?v=270.0.1','app.js?v=270.0.1','manifest.webmanifest?v=270.0.1','icon.svg'];
+const CACHE='conan-rp-mobile-280-20261004-1';
+const CORE=['./?v=280.0.0','index.html?v=280.0.0','styles.css?v=280.0.0','app.js?v=280.0.0','manifest.webmanifest?v=280.0.0','icon.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()])));
 self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response;}).catch(()=>caches.match(event.request)));});
