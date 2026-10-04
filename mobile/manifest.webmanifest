@@ -3,7 +3,7 @@
   "short_name": "Conan RP",
   "description": "Mobile Companion 270 mit verschlüsselten Echtzeit-Chats, Clans, Terminen, Offline-Synchronisierung und Push.",
   "lang": "de",
-  "start_url": "./",
+  "start_url": "./?v=270.0.1",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b1018",
