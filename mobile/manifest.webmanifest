@@ -1,7 +1,7 @@
 {
   "name": "Conan RP-Planer Mobile Companion",
   "short_name": "Conan RP",
-  "description": "Boten, Clan-Chats, Aufgaben und Events unterwegs.",
+  "description": "Mobile Companion 270 mit verschlüsselten Echtzeit-Chats, Clans, Terminen, Offline-Synchronisierung und Push.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
