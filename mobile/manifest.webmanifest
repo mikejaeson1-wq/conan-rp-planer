@@ -1,9 +1,9 @@
 {
   "name": "Conan RP-Planer Mobile Companion",
   "short_name": "Conan RP",
-  "description": "Mobile Companion 280 mit verschlüsselten Echtzeit-Chats, Clans, vollständigem Kalender, Offline-Synchronisierung und Push.",
+  "description": "Mobile Companion 300 mit verschlüsselten Echtzeit-Chats, Kalender, Discord-Anmeldung, QR-Kopplung und Web-Push.",
   "lang": "de",
-  "start_url": "./?v=280.0.0",
+  "start_url": "./?v=300.0.0",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b1018",
