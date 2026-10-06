@@ -3,7 +3,7 @@
   "short_name": "Conan RP",
   "description": "Mobile Companion 300 mit verschlüsselten Echtzeit-Chats, Kalender, Discord-Anmeldung, QR-Kopplung und Web-Push.",
   "lang": "de",
-  "start_url": "./?v=300.0.0",
+  "start_url": "./?v=300.1.0",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b1018",

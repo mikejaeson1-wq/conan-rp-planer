@@ -69,5 +69,5 @@ $('#chatFile').onchange=async event=>{const file=event.target.files?.[0];if(!fil
 window.addEventListener('online',()=>{setConnection(true,'Synchronisiere');Promise.all([flushOfflineQueue(),flushAppointmentQueue270()]).then(()=>refresh()).then(render).catch(()=>{});connectRealtime();});window.addEventListener('offline',()=>setConnection(false,'Offline'));
 try{state.key=JSON.parse(localStorage.getItem('crp-mobile-key')||'null');}catch(_){}
 state.calendarView=localStorage.getItem('crp-mobile-calendar-view-280')||'month';
-if('serviceWorker'in navigator){let reloadingFor300=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloadingFor300)return;reloadingFor300=true;location.reload();});navigator.serviceWorker.register('sw.js?v=300.0.0').then(registration=>registration.update()).catch(console.warn);}
+if('serviceWorker'in navigator){let reloadingFor300=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloadingFor300)return;reloadingFor300=true;location.reload();});navigator.serviceWorker.register('sw.js?v=300.1.0').then(registration=>registration.update()).catch(console.warn);}
 let stored=null;try{stored=JSON.parse(localStorage.getItem('crp-mobile-session')||'null');}catch(_){}if(stored?.access_token)start(stored).catch(logout);

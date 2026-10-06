@@ -3,11 +3,23 @@
   const fromUrl=value=>{const pad='='.repeat((4-value.length%4)%4);return Uint8Array.from(atob((value+pad).replaceAll('-','+').replaceAll('_','/')),c=>c.charCodeAt(0));};
   const params=()=>new URLSearchParams(location.hash.replace(/^#/,''));
   const pendingKey='crp-mobile-pair-pending-300';
+  const discordLinkKey='crp-mobile-discord-link-pending-300';
+  const hasDiscordIdentity300=()=>[...(state.user?.identities||[]).map(item=>item?.provider),...(state.user?.app_metadata?.providers||[])].some(provider=>String(provider).toLowerCase()==='discord');
 
   async function discordLogin300(){
     const pair=params().get('pair'); if(pair)sessionStorage.setItem(pendingKey,pair);
     const redirect=`${location.origin}${location.pathname}`;
     location.href=`${SUPABASE}/auth/v1/authorize?provider=discord&redirect_to=${encodeURIComponent(redirect)}`;
+  }
+
+  async function linkDiscord300(){
+    if(!state.session?.access_token)throw new Error('Bitte zuerst mit E-Mail und Passwort anmelden.');
+    if(hasDiscordIdentity300())return;
+    const redirect=`${location.origin}${location.pathname}`;
+    const result=await api(`/auth/v1/user/identities/authorize?provider=discord&redirect_to=${encodeURIComponent(redirect)}&skip_http_redirect=true`);
+    if(!result?.url)throw new Error('Supabase hat keine Discord-Freigabeadresse zurückgegeben.');
+    sessionStorage.setItem(discordLinkKey,'1');
+    location.href=result.url;
   }
 
   async function oauthCallback300(){
@@ -54,14 +66,14 @@
   }
 
   const oldSecurity=renderSecurity;
-  renderSecurity=function(){oldSecurity();const page=$('#page');if(!page)return;page.insertAdjacentHTML('afterbegin',`<section class="card"><small class="muted">MOBILE 300</small><h2>QR-Kopplung & echter Push</h2><p>Discord-Anmeldung und der komplette Nachrichtenschlüsselbund werden sicher mit deinem Konto verbunden. Deine E-Mail-Adresse bleibt verborgen.</p><button class="primary wide" id="pushTest300">Push aktivieren & testen</button><p id="pushStatus300" class="muted">Der Test zeigt sofort, ob Hintergrundbenachrichtigungen ankommen.</p></section>`);$('#pushTest300').onclick=async()=>{const node=$('#pushStatus300');node.textContent='Push wird eingerichtet …';try{await registerPush300();node.textContent='✅ Test gesendet. Du solltest jetzt eine Handy-Benachrichtigung sehen.';node.classList.add('push-ok-300');}catch(error){node.textContent=error.message;}};};
+  renderSecurity=function(){oldSecurity();const page=$('#page');if(!page)return;const discordLinked=hasDiscordIdentity300();page.insertAdjacentHTML('afterbegin',`<section class="card"><small class="muted">KONTO 300.1</small><h2>Discord mit Planer verbinden</h2><p>${discordLinked?'✅ Discord ist mit diesem Planer-Konto verknüpft. Du kannst dich künftig direkt mit Discord anmelden.':'Verbinde dein bereits angemeldetes Planer-Konto einmalig mit Discord. Benutzer-ID, Chats und Schlüssel bleiben dabei erhalten.'}</p>${discordLinked?'':'<button class="discord wide" id="linkDiscordMobile300">Discord mit diesem Konto verknüpfen</button>'}<p id="discordLinkStatus300" class="muted">Deine E-Mail-Adresse wird Discord-Nutzern nicht angezeigt.</p></section><section class="card"><small class="muted">MOBILE 300</small><h2>QR-Kopplung & echter Push</h2><p>Discord-Anmeldung und der komplette Nachrichtenschlüsselbund werden sicher mit deinem Konto verbunden. Deine E-Mail-Adresse bleibt verborgen.</p><button class="primary wide" id="pushTest300">Push aktivieren & testen</button><p id="pushStatus300" class="muted">Der Test zeigt sofort, ob Hintergrundbenachrichtigungen ankommen.</p></section>`);if($('#linkDiscordMobile300'))$('#linkDiscordMobile300').onclick=async()=>{const node=$('#discordLinkStatus300');node.textContent='Discord wird geöffnet …';try{await linkDiscord300();}catch(error){node.textContent=/manual.link/i.test(error.message)?'Der Projektbesitzer muss in Supabase unter Authentication → Settings zuerst Manual Linking aktivieren.':error.message;}};$('#pushTest300').onclick=async()=>{const node=$('#pushStatus300');node.textContent='Push wird eingerichtet …';try{await registerPush300();node.textContent='✅ Test gesendet. Du solltest jetzt eine Handy-Benachrichtigung sehen.';node.classList.add('push-ok-300');}catch(error){node.textContent=error.message;}};};
 
   $('#discordMobile300')?.addEventListener('click',discordLogin300);
   navigator.serviceWorker?.addEventListener('message',event=>{if(event.data?.type==='sync-300')Promise.all([flushOfflineQueue(),flushAppointmentQueue270()]).catch(()=>{});});
 
   (async()=>{
     const urlPair=params().get('pair'); if(urlPair)sessionStorage.setItem(pendingKey,urlPair);
-    try{await oauthCallback300();}catch(error){$('#authStatus').textContent=error.message;return;}
+    try{const completed=await oauthCallback300();if(completed&&sessionStorage.getItem(discordLinkKey)==='1'){sessionStorage.removeItem(discordLinkKey);alert(hasDiscordIdentity300()?'Discord wurde erfolgreich mit deinem vorhandenen Planer-Konto verknüpft.':'Die Anmeldung wurde übernommen, Discord ist aber noch nicht als Identität eingetragen.');}}catch(error){$('#authStatus').textContent=error.message;return;}
     const tryPair=async()=>{const pair=sessionStorage.getItem(pendingKey);if(pair&&state.user)try{await consumePairing300(pair);}catch(error){alert(error.message);}};
     if(state.user)await tryPair();else setTimeout(tryPair,1200);
   })();
