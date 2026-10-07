@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Conan RP-Planer für Windows herunterladen und Schritt für Schritt einrichten.">
+  <meta name="theme-color" content="#111827">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src https://api.github.com; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>Conan RP-Planer herunterladen</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080d15;
+      --panel: rgba(20, 29, 42, .92);
+      --panel-soft: rgba(30, 41, 57, .72);
+      --gold: #efc261;
+      --gold-strong: #d99a37;
+      --text: #f8f4ec;
+      --muted: #b7c1cf;
+      --line: #3b4b62;
+      --ok: #8ce0ae;
+      --danger: #ffabab;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .42);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(62, 91, 132, .48), transparent 33rem),
+        radial-gradient(circle at 88% 18%, rgba(116, 70, 26, .35), transparent 30rem),
+        linear-gradient(160deg, #111927 0%, var(--bg) 55%, #10141c 100%);
+      font: 16px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    a { color: inherit; }
+    button, a.button { font: inherit; }
+    .wrap { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(121, 142, 173, .25);
+      background: rgba(8, 13, 21, .82);
+      backdrop-filter: blur(18px);
+    }
+
+    nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 800; }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold);
+      font: 700 21px Georgia, serif;
+      box-shadow: 0 0 22px rgba(239, 194, 97, .18);
+    }
+
+    .nav-links { display: flex; gap: 18px; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 700; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .hero { padding: clamp(54px, 8vw, 96px) 0 46px; text-align: center; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 7px 13px;
+      border: 1px solid rgba(239, 194, 97, .35);
+      border-radius: 999px;
+      background: rgba(239, 194, 97, .08);
+      color: #ffe1a2;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; }
+    h1 { max-width: 900px; margin: 0 auto; font-size: clamp(38px, 7vw, 72px); line-height: 1.03; }
+    h1 span { color: var(--gold); }
+    .lead { max-width: 760px; margin: 22px auto 0; color: var(--muted); font-size: clamp(18px, 2.4vw, 22px); }
+
+    .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+    .button {
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 13px 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #263246;
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease, border-color .15s ease;
+    }
+    .button:hover { transform: translateY(-2px); filter: brightness(1.09); border-color: #7185a2; }
+    .button.primary { border-color: #f7ce7b; background: linear-gradient(180deg, #f1c667, #cf8d2f); color: #1c1408; }
+    .button.ghost { background: rgba(24, 34, 48, .6); }
+    .button.small { min-height: 44px; padding: 10px 15px; font-size: 14px; }
+
+    .release-meta { margin-top: 18px; color: var(--muted); font-size: 14px; }
+    .release-meta strong { color: var(--ok); }
+    .status-error { color: var(--danger); }
+
+    .section { padding: 38px 0 70px; }
+    .section-heading { max-width: 760px; margin-bottom: 24px; }
+    .section-heading h2 { margin: 0 0 8px; color: var(--gold); font-size: clamp(29px, 4vw, 42px); }
+    .section-heading p { margin: 0; color: var(--muted); }
+
+    .downloads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(31, 43, 60, .94), var(--panel));
+      box-shadow: var(--shadow);
+    }
+    .download-card { padding: 27px; }
+    .download-card.recommended { border-color: rgba(239, 194, 97, .75); }
+    .flag {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(140, 224, 174, .13);
+      color: var(--ok);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .download-card h3 { margin: 0; font-size: 25px; }
+    .download-card p { min-height: 52px; color: var(--muted); }
+    .file-meta { margin: 14px 0 20px; color: #d4dbe6; font: 13px/1.5 Consolas, monospace; overflow-wrap: anywhere; }
+    .download-card[hidden] { display: none; }
+
+    .guide-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(280px, .7fr); gap: 22px; align-items: start; }
+    .steps { counter-reset: install; display: grid; gap: 14px; }
+    .step {
+      counter-increment: install;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 15px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+    .step::before {
+      content: counter(install);
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(239, 194, 97, .12);
+      color: var(--gold);
+      font-weight: 900;
+      border: 1px solid rgba(239, 194, 97, .4);
+    }
+    .step h3 { margin: 1px 0 5px; font-size: 20px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .qr-card { padding: 24px; text-align: center; position: sticky; top: 90px; }
+    .qr-card img { width: min(290px, 100%); padding: 10px; border-radius: 16px; background: white; }
+    .qr-card h3 { margin: 16px 0 6px; font-size: 24px; }
+    .qr-card p { color: var(--muted); margin: 0 0 16px; }
+
+    .notice {
+      margin-top: 20px;
+      padding: 18px 20px;
+      border-left: 4px solid var(--gold-strong);
+      border-radius: 10px;
+      background: rgba(120, 78, 29, .16);
+      color: #eedfc4;
+    }
+    .notice strong { color: var(--gold); }
+
+    .setup-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .setup-card { padding: 22px; }
+    .setup-card h3 { margin: 0 0 8px; color: #ffe0a0; font-size: 21px; }
+    .setup-card p { margin: 0; color: var(--muted); }
+
+    details { border: 1px solid var(--line); border-radius: 13px; background: rgba(20, 29, 42, .74); }
+    details + details { margin-top: 10px; }
+    summary { padding: 17px 19px; cursor: pointer; font-weight: 800; }
+    details p { margin: 0; padding: 0 19px 18px; color: var(--muted); }
+
+    footer { border-top: 1px solid rgba(121, 142, 173, .24); padding: 30px 0 44px; color: #96a3b5; text-align: center; font-size: 14px; }
+    footer strong { color: var(--gold); }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .toast { min-height: 24px; margin-top: 8px; color: var(--ok); font-weight: 800; }
+
+    @media (max-width: 820px) {
+      .downloads, .setup-cards, .guide-grid { grid-template-columns: 1fr; }
+      .qr-card { position: static; }
+      .nav-links a:not(.keep) { display: none; }
+    }
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 22px, 1160px); }
+      .hero { padding-top: 42px; }
+      .hero-actions .button { width: 100%; }
+      .download-card { padding: 21px; }
+      .step { grid-template-columns: 42px 1fr; padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Hauptnavigation">
+      <a class="brand" href="../">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span>Conan RP-Planer</span>
+      </a>
+      <div class="nav-links">
+        <a href="#installation">Installation</a>
+        <a href="#einrichtung">Einrichtung</a>
+        <a class="keep" href="../mobile/">Mobile App</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow">Offizieller Windows-Download</div>
+      <h1>Deine Welt. Deine Geschichten. <span>Gemeinsam geplant.</span></h1>
+      <p class="lead">Lade hier automatisch die aktuellste Version des Conan RP-Planers herunter. Projektadresse und öffentlicher Zugangsschlüssel sind bereits eingerichtet.</p>
+      <div class="hero-actions">
+        <a id="primaryDownload" class="button primary" href="https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest">Windows-Setup herunterladen</a>
+        <a class="button ghost" href="#installation">Installationsanleitung</a>
+      </div>
+      <p id="releaseStatus" class="release-meta" role="status" aria-live="polite">Neueste Version wird geprüft …</p>
+    </section>
+
+    <section class="section wrap" aria-labelledby="download-title">
+      <div class="section-heading">
+        <h2 id="download-title">Passenden Installer auswählen</h2>
+        <p>Für die meisten Windows-PCs ist die x64-Version die richtige und kleinere Datei.</p>
+      </div>
+      <div class="downloads">
+        <article id="x64Card" class="card download-card recommended" hidden>
+          <span class="flag">Für die meisten PCs empfohlen</span>
+          <h3>Windows x64</h3>
+          <p>Für normale Windows-10- und Windows-11-PCs mit Intel- oder AMD-Prozessor.</p>
+          <div id="x64Meta" class="file-meta"></div>
+          <a id="x64Download" class="button primary" href="https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest">x64-Setup herunterladen</a>
+        </article>
+
+        <article id="universalCard" class="card download-card" hidden>
+          <span class="flag">Alternative</span>
+          <h3>Windows Universal</h3>
+          <p>Enthält mehrere Windows-Architekturen und ist deshalb deutlich größer.</p>
+          <div id="universalMeta" class="file-meta"></div>
+          <a id="universalDownload" class="button" href="https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest">Universelles Setup herunterladen</a>
+        </article>
+
+        <article id="armCard" class="card download-card" hidden>
+          <span class="flag">Nur für ARM-PCs</span>
+          <h3>Windows ARM64</h3>
+          <p>Nur für Windows-Geräte mit ARM-Prozessor, beispielsweise bestimmte Snapdragon-PCs.</p>
+          <div id="armMeta" class="file-meta"></div>
+          <a id="armDownload" class="button" href="https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest">ARM64-Setup herunterladen</a>
+        </article>
+
+        <article class="card download-card">
+          <span class="flag">Alle Dateien</span>
+          <h3>GitHub-Release öffnen</h3>
+          <p>Installationsanleitung, Prüfsummen, SQL-Update und weitere Dateien ansehen.</p>
+          <div class="file-meta">Offizielle Veröffentlichungsseite</div>
+          <a class="button" href="https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest" target="_blank" rel="noreferrer">Alle Release-Dateien</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="installation" class="section wrap" aria-labelledby="installation-title">
+      <div class="section-heading">
+        <h2 id="installation-title">Installation in wenigen Schritten</h2>
+        <p>Es muss keine ZIP-Datei entpackt und kein PowerShell-Fenster geöffnet werden.</p>
+      </div>
+      <div class="guide-grid">
+        <div>
+          <div class="steps">
+            <article class="step">
+              <div>
+                <h3>Setup herunterladen</h3>
+                <p>Wähle oben die x64-Version. Verwende die universelle Variante nur, wenn x64 auf deinem Gerät nicht funktioniert.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Heruntergeladene EXE öffnen</h3>
+                <p>Öffne deinen Download-Ordner und starte die Datei mit „Setup“ im Namen. Starte den Planer niemals direkt aus einer ZIP-Datei.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Windows-Hinweis prüfen</h3>
+                <p>Falls Windows SmartScreen erscheint, prüfe zuerst, dass die Datei von dieser offiziellen GitHub-Seite stammt. Wähle anschließend „Weitere Informationen“ und „Trotzdem ausführen“.</p>
+              </div>
+            </article>
+            <article class="step">
+              <div>
+                <h3>Installation abschließen</h3>
+                <p>Folge dem Setup. Danach startest du den Planer über das Startmenü oder die Desktopverknüpfung – ohne dauerhaft sichtbares CMD-Fenster.</p>
+              </div>
+            </article>
+          </div>
+          <div class="notice"><strong>Update statt Neuinstallation:</strong> Planer vorher schließen und anschließend das neue Setup ausführen. Persönliche Planerdaten bleiben erhalten.</div>
+        </div>
+
+        <aside class="card qr-card">
+          <img src="qr-download.png" alt="QR-Code zur Downloadseite des Conan RP-Planers" width="656" height="656">
+          <h3>Downloadseite teilen</h3>
+          <p>QR-Code scannen oder den Seitenlink direkt über Discord verschicken.</p>
+          <button id="copyPage" class="button small" type="button">Link kopieren</button>
+          <div id="copyToast" class="toast" role="status" aria-live="polite"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="einrichtung" class="section wrap" aria-labelledby="setup-title">
+      <div class="section-heading">
+        <h2 id="setup-title">Erste Einrichtung</h2>
+        <p>Die Supabase-Projektadresse und der öffentliche Schlüssel sind bereits im Planer hinterlegt.</p>
+      </div>
+      <div class="setup-cards">
+        <article class="card setup-card">
+          <h3>1. Konto anlegen</h3>
+          <p>Öffne „Boten &amp; Clan“, registriere dich mit E-Mail-Adresse und Passwort und bestätige anschließend die erhaltene E-Mail.</p>
+        </article>
+        <article class="card setup-card">
+          <h3>2. Angemeldet bleiben</h3>
+          <p>Aktiviere die Option „Angemeldet bleiben“, wenn du dich auf deinem eigenen PC nicht bei jedem Start neu anmelden möchtest.</p>
+        </article>
+        <article class="card setup-card">
+          <h3>3. Discord verbinden</h3>
+          <p>Discord ist optional. Verknüpfe es nach der normalen Kontoanmeldung über den entsprechenden Bereich im Planer.</p>
+        </article>
+        <article class="card setup-card">
+          <h3>4. Charaktere anlegen</h3>
+          <p>Lege deine Charaktere und RP-Partner an. Bilder und persönliche Planerdaten können lokal verwaltet werden.</p>
+        </article>
+        <article class="card setup-card">
+          <h3>5. Mobile App koppeln</h3>
+          <p>Öffne den Mobile-Companion-Bereich im Desktop-Planer und übertrage dort deinen Nachrichtenschlüssel auf dein Handy.</p>
+        </article>
+        <article class="card setup-card">
+          <h3>6. Updates erhalten</h3>
+          <p>Der Planer sucht regelmäßig nach neuen GitHub-Versionen. Alternativ führt diese Seite immer zum neuesten Installer.</p>
+        </article>
+      </div>
+      <div class="notice"><strong>Datenschutz:</strong> Andere Planer-Nutzer sehen deine E-Mail-Adresse nicht. Normale Nutzer müssen keine Supabase- oder VAPID-Schlüssel eintragen.</div>
+    </section>
+
+    <section class="section wrap" aria-labelledby="help-title">
+      <div class="section-heading">
+        <h2 id="help-title">Häufige Fragen</h2>
+      </div>
+      <details>
+        <summary>Welche Datei soll ich herunterladen?</summary>
+        <p>Auf einem üblichen Windows-10- oder Windows-11-PC nimmst du „Windows x64“. Die universelle Setup-Datei ist größer und dient als Alternative.</p>
+      </details>
+      <details>
+        <summary>Warum zeigt Windows eine Warnung?</summary>
+        <p>Der Installer ist derzeit nicht mit einem kostenpflichtigen Windows-Code-Signing-Zertifikat signiert. Lade ihn ausschließlich über diese Seite beziehungsweise das offizielle GitHub-Repository herunter und vergleiche bei Bedarf die SHA256-Prüfsumme im Release.</p>
+      </details>
+      <details>
+        <summary>Nach dem Update startet noch eine alte Version</summary>
+        <p>Lösche keine persönlichen Daten. Schließe alle laufenden Planerfenster, installiere das aktuelle Setup und starte danach ausschließlich den Eintrag aus dem Windows-Startmenü. Alte entpackte ZIP-Ordner können anschließend entfernt werden.</p>
+      </details>
+      <details>
+        <summary>Müssen andere Nutzer Supabase einrichten?</summary>
+        <p>Nein. Projektadresse und öffentlicher Schlüssel sind bereits vorkonfiguriert. Andere Nutzer benötigen lediglich ein eigenes Konto und bestätigen ihre E-Mail-Adresse.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><strong>Conan RP-Planer</strong> · Deine Welt · deine Geschichten · gemeinsam geplant · made by Elion</div>
+  </footer>
+
+  <script>
+  (() => {
+    "use strict";
+    const API = "https://api.github.com/repos/mikejaeson1-wq/conan-rp-planer/releases/latest";
+    const RELEASES = "https://github.com/mikejaeson1-wq/conan-rp-planer/releases/latest";
+    const $ = id => document.getElementById(id);
+    const formatSize = bytes => {
+      if (!Number.isFinite(bytes)) return "";
+      const units = ["B", "KB", "MB", "GB"];
+      let value = bytes, unit = 0;
+      while (value >= 1024 && unit < units.length - 1) { value /= 1024; unit += 1; }
+      return `${value.toLocaleString("de-DE", { maximumFractionDigits: 1 })} ${units[unit]}`;
+    };
+    const choose = (assets, test) => assets.find(asset => test(asset.name.toLowerCase()));
+    const bindAsset = (asset, cardId, linkId, metaId) => {
+      if (!asset) return;
+      $(cardId).hidden = false;
+      $(linkId).href = asset.browser_download_url;
+      $(metaId).textContent = `${asset.name} · ${formatSize(asset.size)}`;
+    };
+
+    fetch(API, { headers: { Accept: "application/vnd.github+json" } })
+      .then(response => {
+        if (!response.ok) throw new Error(`GitHub API: ${response.status}`);
+        return response.json();
+      })
+      .then(release => {
+        const assets = Array.isArray(release.assets) ? release.assets : [];
+        const x64 = choose(assets, name => name.endsWith(".exe") && name.includes("setup") && name.includes("x64"));
+        const arm = choose(assets, name => name.endsWith(".exe") && name.includes("setup") && (name.includes("arm64") || name.includes("aarch64")));
+        const universal = choose(assets, name => name.endsWith(".exe") && name.includes("setup") && !name.includes("x64") && !name.includes("arm64") && !name.includes("aarch64"));
+        bindAsset(x64, "x64Card", "x64Download", "x64Meta");
+        bindAsset(universal, "universalCard", "universalDownload", "universalMeta");
+        bindAsset(arm, "armCard", "armDownload", "armMeta");
+
+        const primary = x64 || universal || arm;
+        if (primary) $("primaryDownload").href = primary.browser_download_url;
+        const date = release.published_at ? new Date(release.published_at).toLocaleDateString("de-DE") : "";
+        $("releaseStatus").textContent = `Aktuell: ${release.name || release.tag_name}${date ? ` · veröffentlicht am ${date}` : ""}`;
+        $("releaseStatus").style.color = "var(--ok)";
+        $("releaseStatus").style.fontWeight = "800";
+      })
+      .catch(() => {
+        $("releaseStatus").classList.add("status-error");
+        $("releaseStatus").textContent = "Die Versionsabfrage ist gerade nicht erreichbar. Der Knopf öffnet deshalb die GitHub-Seite mit der neuesten Version.";
+        $("primaryDownload").href = RELEASES;
+      });
+
+    $("copyPage").addEventListener("click", async () => {
+      const link = "https://mikejaeson1-wq.github.io/conan-rp-planer/download/";
+      try {
+        await navigator.clipboard.writeText(link);
+      } catch (_) {
+        const field = document.createElement("textarea");
+        field.value = link;
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand("copy");
+        field.remove();
+      }
+      $("copyToast").textContent = "Downloadlink kopiert.";
+      setTimeout(() => $("copyToast").textContent = "", 4000);
+    });
+  })();
+  </script>
+</body>
+</html>
